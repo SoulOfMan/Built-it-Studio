@@ -4,9 +4,10 @@ import {
 } from '@dnd-kit/core';
 import { SortableContext, arrayMove, useSortable, verticalListSortingStrategy, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { Art } from './Art';
 import { Switch } from './Switch';
 import type { Brief } from '../lib/useBrief';
-import { host, validUrl, type Feed } from '../lib/model';
+import { SHADES, host, validUrl, type Feed } from '../lib/model';
 import { searchPodcasts, type PodcastHit } from '../lib/downloads';
 import { EditIcon, GripIcon, TrashIcon } from './Icons';
 
@@ -168,6 +169,7 @@ function FeedRow({ f, i, b, editing, onEdit, onDone }: { f: Feed; i: number; b: 
         <div className="feed-line">
           <span className="grip" aria-label={'Reorder ' + f.name} {...attributes} {...listeners}><GripIcon /></span>
           <span className="num">{String(i + 1).padStart(2, '0')}</span>
+          <Art className="art sm" img={b.p.cache[f.id]?.image} ab={f.ab} bg={SHADES[i % SHADES.length]} />
           <div className="feed-main">
             <div className="feed-name">{f.name}</div>
             <div className="feed-meta" style={cacheErr ? { color: 'var(--red)' } : undefined}>

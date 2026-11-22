@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { Brief } from '../lib/useBrief';
 import { mb } from '../lib/model';
+import { Art } from './Art';
 import { TrashIcon } from './Icons';
 
 export function OfflineView({ b }: { b: Brief }) {
@@ -29,7 +30,7 @@ export function OfflineView({ b }: { b: Brief }) {
       <div className="section-row"><h2>Saved episodes</h2></div>
       {saved.map(e => (
         <div key={e.id} className="ep-row">
-          <div className="art sm" style={{ background: e.bg }}>{e.ab}</div>
+          <Art className="art sm" img={e.img} ab={e.ab} bg={e.bg} />
           <div className="ep-main" onClick={() => b.play(e.id)}>
             <div className="ep-title one">{e.title}</div>
             <div className="ep-sub">{e.show} · {mb(e.savedBytes)} MB</div>

@@ -2,6 +2,7 @@ import type { Brief } from '../lib/useBrief';
 import { agoLabel, fmt, sizeLabel } from '../lib/model';
 import { CheckIcon, DownloadIcon, PauseIcon, PlayIcon, RefreshIcon } from './Icons';
 import { useState } from 'react';
+import { Art } from './Art';
 import { Switch } from './Switch';
 import { InstallButton } from './InstallButton';
 
@@ -108,7 +109,7 @@ export function QueueView({ b }: { b: Brief }) {
         const onPlay = () => isCur ? b.toggle() : b.play(e.id);
         return (
           <div key={e.id} className="ep-row" style={{ opacity: played || unavailable ? 0.42 : 1 }}>
-            <div className="art" style={{ background: e.bg }}>{e.ab}</div>
+            <Art img={e.img} ab={e.ab} bg={e.bg} />
             <div className="ep-main" onClick={onPlay}>
               <div className="ep-show">{isCur && playing && <span className="eq" aria-hidden="true"><i /><i /><i /></span>}{e.show}</div>
               <div className="ep-title">{e.title}</div>

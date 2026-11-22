@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { Brief } from '../lib/useBrief';
 import { SPEEDS, fmt } from '../lib/model';
+import { Art } from './Art';
 import { Back15, ChevronDown, Fwd15, PauseIcon, PlayIcon } from './Icons';
 
 export function MiniPlayer({ b }: { b: Brief }) {
@@ -11,7 +12,7 @@ export function MiniPlayer({ b }: { b: Brief }) {
       <div className="mini-progress" style={{ width: cur.dur ? (pos / cur.dur * 100).toFixed(2) + '%' : '0%' }} />
       <div className="mini-row">
         <button className="mini-open" onClick={() => b.setExpanded(true)} aria-label="Open player">
-          <div className="art sm" style={{ background: cur.bg }}>{cur.ab}</div>
+          <Art className="art sm" img={cur.img} ab={cur.ab} bg={cur.bg} />
           <div className="mini-text">
             <div className="mini-title">{cur.title}</div>
             <div className="mono-muted">{fmt(pos)} / {fmt(cur.dur)} · {b.p.speed}×</div>
@@ -50,7 +51,7 @@ export function FullPlayer({ b }: { b: Brief }) {
         <span className="date">{idx >= 0 ? `Episode ${idx + 1} of ${q.length}` : 'Saved episode'}</span>
         <span style={{ width: 44 }} />
       </div>
-      <div className="full-art" style={{ background: cur.bg }}>{cur.ab}</div>
+      <Art className="full-art" img={cur.img} ab={cur.ab} bg={cur.bg} />
       <div style={{ marginTop: 28 }}>
         <div className="muted" style={{ fontSize: 13 }}>{cur.show}</div>
         <div className="full-title">{cur.title}</div>

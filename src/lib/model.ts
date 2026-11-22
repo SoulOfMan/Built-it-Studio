@@ -33,6 +33,7 @@ export interface Episode {
   show: string;
   ab: string;
   bg: string;
+  img?: string;
   title: string;
   audioUrl: string;
   type: string;
@@ -117,7 +118,7 @@ export function episodesFor(feed: Feed, index: number, entry: FeedCacheEntry | u
     const id = feed.id + '::' + e.guid;
     const dur = durations[id] || e.duration || (e.bytes ? Math.round(e.bytes / 16000) : 0);
     return {
-      id, feedId: feed.id, show: feed.name, ab: feed.ab, bg: SHADES[index % SHADES.length],
+      id, feedId: feed.id, show: feed.name, ab: feed.ab, bg: SHADES[index % SHADES.length], img: e.image || entry.image || '',
       title: e.title, audioUrl: e.audioUrl, type: e.type, dur, published: e.published,
       bytes: e.bytes || estBytes(dur)
     };

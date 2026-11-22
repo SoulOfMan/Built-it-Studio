@@ -239,3 +239,7 @@ h2 { font: 600 17px/1.2 var(--display); letter-spacing: -.01em; margin: 0; }
 .hit { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
 .hit img { border-radius: 10px; background: var(--line); flex: none; object-fit: cover; }
 .hit-main { flex: 1; min-width: 0; }
+
+/* cover art images fill the tile */
+.art, .full-art { overflow: hidden; }
+.art > img, .full-art > img { width: 100%; height: 100%; object-fit: cover; display: block; }
