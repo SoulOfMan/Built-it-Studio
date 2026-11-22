@@ -116,6 +116,7 @@ function FeedRow({ f, i, b, editing, onEdit, onDone }: { f: Feed; i: number; b: 
             <div className="feed-name">{f.name}</div>
             <div className="feed-meta" style={cacheErr ? { color: '#b3261e' } : undefined}>
               {cacheErr ? 'COULDN’T UPDATE · ' + host(f.url) : `${f.cat} · ${host(f.url)}`}
+              {cacheErr && <div title={cacheErr} style={{ textTransform: 'none', marginTop: 2 }}>{cacheErr}</div>}
             </div>
           </div>
           <button className="icon-btn" aria-label={'Edit ' + f.name} onClick={() => { setName(f.name); setUrl(f.url); setErr(''); onEdit(); }}><EditIcon /></button>

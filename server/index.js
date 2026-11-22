@@ -38,18 +38,36 @@ app.get('/api/feed', async (req, res) => {
   const hit = feedCache.get(key);
   if (hit && Date.now() - hit.at < FEED_TTL_MS && req.query.fresh !== '1') return res.json(hit.data);
   try {
-    const r = await fetch(key, {
-      headers: { 'user-agent': UA, accept: 'application/rss+xml, application/xml, text/xml, */*' },
-      signal: AbortSignal.timeout(15000)
-    });
-    if (!r.ok) return res.status(502).json({ error: `Feed responded ${r.status}` });
-    const data = parseFeed(await r.text(), key);
+    const data = parseFeed(await fetchFeedText(key), key);
     feedCache.set(key, { at: Date.now(), data });
     res.json(data);
   } catch (e) {
+    // Prefer slightly stale data over an error
+    if (hit) return res.json(hit.data);
     res.status(502).json({ error: e?.name === 'TimeoutError' ? 'Feed timed out' : (e?.message || 'Could not load feed') });
   }
 });
+
+const BROWSER_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36';
+const ACCEPT = 'application/rss+xml, application/atom+xml, application/xml;q=0.9, text/xml;q=0.9, */*;q=0.8';
+
+/** Some CDNs (e.g. BBC) reject unknown user agents or blip with 403/5xx: retry with a browser UA. */
+async function fetchFeedText(url) {
+  let lastErr;
+  for (const ua of [UA, BROWSER_UA, BROWSER_UA]) {
+    try {
+      const r = await fetch(url, {
+        headers: { 'user-agent': ua, accept: ACCEPT, 'accept-language': 'en-GB,en;q=0.9' },
+        redirect: 'follow',
+        signal: AbortSignal.timeout(15000)
+      });
+      if (r.ok) return await r.text();
+      lastErr = new Error(`Feed responded ${r.status}`);
+      if (r.status === 404 || r.status === 410) break; // genuinely gone
+    } catch (e) { lastErr = e; }
+  }
+  throw lastErr;
+}
 
 /** Streams episode audio with CORS so the browser can save it for offline playback. */
 app.get('/api/audio', async (req, res) => {
