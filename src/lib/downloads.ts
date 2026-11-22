@@ -7,7 +7,7 @@ export const audioProxyUrl = (url: string) => '/api/audio?url=' + encodeURICompo
 
 export async function fetchFeed(url: string, fresh = false): Promise<{ title: string; image: string; episodes: RawEpisode[] }> {
   const r = await fetch('/api/feed?url=' + encodeURIComponent(url) + (fresh ? '&fresh=1' : ''));
-  const body = await r.json().catch(() => ({ error: 'Bad response from server' }));
+  const body = await r.json().catch(() => ({ error: `Feed API not reachable (HTTP ${r.status}). The Node server must host /api` }));
   if (!r.ok) throw new Error(body.error || 'Could not load feed');
   return body;
 }
