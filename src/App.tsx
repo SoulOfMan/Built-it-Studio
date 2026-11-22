@@ -4,6 +4,7 @@ import { FeedsView } from './components/FeedsView';
 import { OfflineView } from './components/OfflineView';
 import { FullPlayer, MiniPlayer } from './components/Player';
 import { QueueIcon, RssIcon, TrayIcon } from './components/Icons';
+import { InstallSheet } from './components/InstallSheet';
 import type { Tab } from './lib/model';
 
 const TABS: [Tab, string, () => JSX.Element][] = [
@@ -30,6 +31,7 @@ export default function App() {
         ))}
       </nav>
       <FullPlayer b={b} />
+      <InstallSheet />
     </div>
   );
 }
