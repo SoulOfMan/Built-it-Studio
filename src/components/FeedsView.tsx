@@ -38,7 +38,7 @@ export function FeedsView({ b }: { b: Brief }) {
 
   return (
     <div className="page">
-      <div className="eyebrow">{p.feeds.length} ACTIVE</div>
+      <div className="date">{p.feeds.length} active</div>
       <h1>Feeds</h1>
 
       <form className="add-row" onSubmit={e => { e.preventDefault(); add(); }}>
@@ -49,8 +49,8 @@ export function FeedsView({ b }: { b: Brief }) {
       {addError && <div className="error" role="alert">{addError}</div>}
 
       <div className="section-row">
-        <span className="eyebrow">PRIORITY ORDER</span>
-        <span className="mono-muted">DRAG TO REORDER</span>
+        <h2>Priority order</h2>
+        <span className="mono-muted">Drag to reorder</span>
       </div>
 
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
@@ -62,7 +62,7 @@ export function FeedsView({ b }: { b: Brief }) {
         </SortableContext>
       </DndContext>
 
-      <div className="eyebrow" style={{ marginTop: 28 }}>QUEUE SETTINGS</div>
+      <h2 style={{ marginTop: 28 }}>Queue settings</h2>
       <div className="settings">
         <div className="setting">
           <span>Episodes per feed</span>
@@ -114,8 +114,8 @@ function FeedRow({ f, i, b, editing, onEdit, onDone }: { f: Feed; i: number; b: 
           <span className="num">{String(i + 1).padStart(2, '0')}</span>
           <div className="feed-main">
             <div className="feed-name">{f.name}</div>
-            <div className="feed-meta" style={cacheErr ? { color: '#b3261e' } : undefined}>
-              {cacheErr ? 'COULDN’T UPDATE · ' + host(f.url) : `${f.cat} · ${host(f.url)}`}
+            <div className="feed-meta" style={cacheErr ? { color: 'var(--red)' } : undefined}>
+              {cacheErr ? 'Couldn’t update · ' + host(f.url) : `${f.cat} · ${host(f.url)}`}
               {cacheErr && <div title={cacheErr} style={{ textTransform: 'none', marginTop: 2 }}>{cacheErr}</div>}
             </div>
           </div>

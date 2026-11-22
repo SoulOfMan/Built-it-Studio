@@ -47,14 +47,14 @@ export function FullPlayer({ b }: { b: Brief }) {
     <div className="full" role="dialog" aria-label="Now playing">
       <div className="full-top">
         <button className="round-btn" aria-label="Close player" onClick={() => b.setExpanded(false)}><ChevronDown /></button>
-        <span className="eyebrow">{idx >= 0 ? `${idx + 1} OF ${q.length}` : 'SAVED EPISODE'}</span>
+        <span className="date">{idx >= 0 ? `Episode ${idx + 1} of ${q.length}` : 'Saved episode'}</span>
         <span style={{ width: 44 }} />
       </div>
       <div className="full-art" style={{ background: cur.bg }}>{cur.ab}</div>
       <div style={{ marginTop: 28 }}>
         <div className="muted" style={{ fontSize: 13 }}>{cur.show}</div>
         <div className="full-title">{cur.title}</div>
-        <div className="pill">{b.p.saved[cur.id] ? 'PLAYING FROM DEVICE' : b.buffering ? 'BUFFERING…' : 'STREAMING'}</div>
+        <div className="pill">{b.p.saved[cur.id] ? 'Playing from device' : b.buffering ? 'Buffering…' : 'Streaming'}</div>
       </div>
       {b.playError && <div className="error" role="alert" style={{ marginTop: 10 }}>{b.playError}</div>}
       <div style={{ marginTop: 20 }}>
@@ -77,7 +77,7 @@ export function FullPlayer({ b }: { b: Brief }) {
         ))}
       </div>
       <div className="upnext">
-        <span className="eyebrow">UP NEXT</span>
+        <span className="date">Up next</span>
         <span className="upnext-t">{nx ? nx.show + ' — ' + nx.title : 'End of today’s queue'}</span>
       </div>
     </div>

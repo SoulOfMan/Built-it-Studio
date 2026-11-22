@@ -12,8 +12,8 @@ export default defineConfig({
         name: 'Daily Brief',
         short_name: 'Daily Brief',
         description: 'Your news podcasts, queued and ready offline.',
-        theme_color: '#fafaf9',
-        background_color: '#fafaf9',
+        theme_color: '#f3f5f8',
+        background_color: '#0e1726',
         display: 'standalone',
         start_url: '/',
         icons: [

@@ -58,7 +58,7 @@ export interface Persisted {
   updatedAt: number;
 }
 
-export const SHADES = ['#111111', '#2b2b2a', '#454543', '#1d1d1c', '#5a5a57', '#383836'];
+export const SHADES = ['#1f3a5f', '#8a3b2e', '#2d5a4a', '#5b3f7a', '#8a5a1c', '#3a4a63'];
 export const SPEEDS = [1, 1.25, 1.5, 2];
 
 export const DEFAULT_FEEDS: Feed[] = [

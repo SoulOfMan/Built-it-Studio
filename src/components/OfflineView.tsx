@@ -10,23 +10,23 @@ export function OfflineView({ b }: { b: Brief }) {
   useEffect(() => { if (!confirm) return; const t = setTimeout(() => setConfirm(false), 3000); return () => clearTimeout(t); }, [confirm]);
 
   const avail = b.available;
-  const availLabel = avail == null ? '' : avail > 1_073_741_824 ? `~${Math.round(avail / 1_073_741_824)} GB AVAILABLE` : `~${Math.round(avail / 1_048_576)} MB AVAILABLE`;
+  const availLabel = avail == null ? '' : avail > 1_073_741_824 ? `~${Math.round(avail / 1_073_741_824)} GB available` : `~${Math.round(avail / 1_048_576)} MB available`;
   const pct = avail ? Math.min(100, Math.max(usedBytes ? 1 : 0, usedBytes / (usedBytes + avail) * 100)) : 0;
 
   return (
     <div className="page">
-      <div className="eyebrow">ON THIS DEVICE</div>
+      <div className="date">On this device</div>
       <h1>Offline</h1>
 
       <div className="card">
         <div className="big-num"><span>{mb(usedBytes).toFixed(1)}</span><span className="muted">MB used</span></div>
         <div className="meter"><div style={{ width: pct + '%' }} /></div>
         <div className="meter-labels">
-          <span>{saved.length} {saved.length === 1 ? 'EPISODE' : 'EPISODES'}</span><span>{availLabel}</span>
+          <span>{saved.length} {saved.length === 1 ? 'episode' : 'episodes'}</span><span>{availLabel}</span>
         </div>
       </div>
 
-      <div className="section-row"><span className="eyebrow">SAVED EPISODES</span></div>
+      <div className="section-row"><h2>Saved episodes</h2></div>
       {saved.map(e => (
         <div key={e.id} className="ep-row">
           <div className="art sm" style={{ background: e.bg }}>{e.ab}</div>
