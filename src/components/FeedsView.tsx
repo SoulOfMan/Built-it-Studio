@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   DndContext, closestCenter, PointerSensor, TouchSensor, KeyboardSensor, useSensor, useSensors, type DragEndEvent
 } from '@dnd-kit/core';
@@ -7,6 +7,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { Switch } from './Switch';
 import type { Brief } from '../lib/useBrief';
 import { host, validUrl, type Feed } from '../lib/model';
+import { searchPodcasts, type PodcastHit } from '../lib/downloads';
 import { EditIcon, GripIcon, TrashIcon } from './Icons';
 
 export function FeedsView({ b }: { b: Brief }) {
@@ -14,6 +15,32 @@ export function FeedsView({ b }: { b: Brief }) {
   const [addUrl, setAddUrl] = useState('');
   const [addError, setAddError] = useState('');
   const [adding, setAdding] = useState(false);
+  const [hits, setHits] = useState<PodcastHit[]>([]);
+  const [searching, setSearching] = useState(false);
+  const [searchErr, setSearchErr] = useState('');
+  const [addingId, setAddingId] = useState<string | null>(null);
+  const isUrl = /^https?:\/\//i.test(addUrl.trim());
+
+  useEffect(() => {
+    const q = addUrl.trim();
+    if (isUrl || q.length < 2) { setHits([]); setSearchErr(''); setSearching(false); return; }
+    setSearching(true);
+    const ac = new AbortController();
+    const t = setTimeout(() => {
+      searchPodcasts(q, ac.signal)
+        .then(r => { setHits(r); setSearchErr(''); setSearching(false); })
+        .catch(e => { if (e.name !== 'AbortError') { setSearchErr(e.message); setHits([]); setSearching(false); } });
+    }, 350);
+    return () => { clearTimeout(t); ac.abort(); };
+  }, [addUrl, isUrl]);
+
+  const addHit = async (h: PodcastHit) => {
+    setAddingId(h.id);
+    const err = await b.addFeed(h.feedUrl);
+    setAddingId(null);
+    setAddError(err || '');
+  };
+
   const [editingId, setEditingId] = useState<string | null>(null);
 
   const sensors = useSensors(
@@ -42,12 +69,36 @@ export function FeedsView({ b }: { b: Brief }) {
       <div className="date">{p.feeds.length} active</div>
       <h1>Feeds</h1>
 
-      <form className="add-row" onSubmit={e => { e.preventDefault(); add(); }}>
-        <input className="input mono" type="url" inputMode="url" autoCapitalize="off" autoCorrect="off" spellCheck={false}
-          value={addUrl} onChange={e => { setAddUrl(e.target.value); setAddError(''); }} placeholder="Paste RSS feed URL" />
-        <button className="dark-btn" type="submit" disabled={adding}>{adding ? 'Checking…' : 'Add'}</button>
+      <form className="add-row" onSubmit={e => { e.preventDefault(); if (isUrl) add(); }}>
+        <input className="input" type="search" inputMode="search" enterKeyHint="search" autoCapitalize="off" autoCorrect="off" spellCheck={false}
+          aria-label="Search podcasts" value={addUrl} onChange={e => { setAddUrl(e.target.value); setAddError(''); }}
+          placeholder="Search podcasts or paste a link" />
+        {isUrl && <button className="dark-btn" type="submit" disabled={adding}>{adding ? 'Checking…' : 'Add'}</button>}
       </form>
       {addError && <div className="error" role="alert">{addError}</div>}
+
+      {!isUrl && addUrl.trim().length >= 2 && (
+        <div className="results" aria-live="polite">
+          {searching && <div className="muted results-note">Searching…</div>}
+          {searchErr && <div className="error">{searchErr}</div>}
+          {!searching && !searchErr && hits.length === 0 && <div className="muted results-note">No podcasts found for “{addUrl.trim()}”.</div>}
+          {hits.map(h => {
+            const have = p.feeds.some(f => f.url === h.feedUrl);
+            return (
+              <div key={h.id} className="hit">
+                <img src={h.image} alt="" width="48" height="48" loading="lazy" />
+                <div className="hit-main">
+                  <div className="feed-name">{h.name}</div>
+                  <div className="feed-meta">{[h.author, h.genre].filter(Boolean).join(' · ')}</div>
+                </div>
+                <button className="light-btn" disabled={have || addingId === h.id} onClick={() => addHit(h)}>
+                  {have ? 'Added' : addingId === h.id ? 'Adding…' : 'Add'}
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       <div className="section-row">
         <h2>Priority order</h2>

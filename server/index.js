@@ -4,7 +4,7 @@ import path from 'node:path';
 import fs from 'node:fs';
 import { Readable } from 'node:stream';
 import { parseFeed } from './rss.js';
-import { checkUrl, fetchFeedText, UA } from './util.js';
+import { checkUrl, fetchFeedText, searchPodcasts, UA } from './util.js';
 
 export { checkUrl };
 
@@ -57,6 +57,11 @@ app.get('/api/audio', async (req, res) => {
     if (!res.headersSent) res.status(502).json({ error: e?.message || 'Could not load audio' });
     else res.destroy();
   }
+});
+
+app.get('/api/search', async (req, res) => {
+  try { res.json({ results: await searchPodcasts(req.query.q) }); }
+  catch (e) { res.status(502).json({ error: 'Search is unavailable right now. Try again in a moment.' }); }
 });
 
 app.get('/api/health', (_req, res) => res.json({ ok: true }));

@@ -62,3 +62,25 @@ export async function fetchFeedText(url) {
   }
   throw new Error('That address is a web page, not an RSS feed');
 }
+
+/** Shape iTunes Search API results into what the app needs. Only shows with a public RSS address are kept. */
+export function mapSearch(json) {
+  return (json?.results || [])
+    .filter(r => r.feedUrl && r.collectionName)
+    .map(r => ({
+      id: String(r.collectionId),
+      name: r.collectionName,
+      author: r.artistName || '',
+      genre: r.primaryGenreName || '',
+      image: r.artworkUrl100 || r.artworkUrl60 || '',
+      feedUrl: r.feedUrl
+    }));
+}
+
+/** Search the free iTunes Search API (no key needed) for podcasts. */
+export async function searchPodcasts(term) {
+  const q = String(term || '').trim().slice(0, 100);
+  if (q.length < 2) return [];
+  const url = `https://itunes.apple.com/search?media=podcast&entity=podcast&limit=20&term=${encodeURIComponent(q)}`;
+  return mapSearch(JSON.parse(await fetchText(url)));
+}

@@ -12,6 +12,15 @@ export async function fetchFeed(url: string, fresh = false): Promise<{ title: st
   return body;
 }
 
+export interface PodcastHit { id: string; name: string; author: string; genre: string; image: string; feedUrl: string }
+
+export async function searchPodcasts(q: string, signal?: AbortSignal): Promise<PodcastHit[]> {
+  const r = await fetch('/api/search?q=' + encodeURIComponent(q), { signal });
+  const body = await r.json().catch(() => ({ error: 'Search is unavailable right now.' }));
+  if (!r.ok) throw new Error(body.error || 'Search is unavailable right now.');
+  return body.results;
+}
+
 /**
  * Downloads an episode through the server proxy and stores it in IndexedDB.
  * Reports progress 0..1; resolves with the stored size in bytes.

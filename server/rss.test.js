@@ -60,3 +60,13 @@ test('trimFeed keeps the first entries and still parses big feeds', async () => 
   assert.ok(trimFeed(xml).length < xml.length);
   assert.equal(parseFeed(xml, 'http://x/feed').episodes.length, 10);
 });
+
+test('mapSearch keeps only shows with a feed URL', async () => {
+  const { mapSearch } = await import('./util.js');
+  const out = mapSearch({ results: [
+    { collectionId: 1, collectionName: 'A', artistName: 'X', primaryGenreName: 'News', artworkUrl100: 'i', feedUrl: 'https://f/a.rss' },
+    { collectionId: 2, collectionName: 'No feed' }
+  ] });
+  assert.deepEqual(out.map(r => r.name), ['A']);
+  assert.equal(out[0].feedUrl, 'https://f/a.rss');
+});
