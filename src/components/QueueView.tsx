@@ -2,6 +2,7 @@ import type { Brief } from '../lib/useBrief';
 import { agoLabel, fmt, sizeLabel } from '../lib/model';
 import { CheckIcon, DownloadIcon, PauseIcon, PlayIcon, RefreshIcon } from './Icons';
 import { useState } from 'react';
+import { Switch } from './Switch';
 import { InstallButton } from './InstallButton';
 
 export function QueueView({ b }: { b: Brief }) {
@@ -57,6 +58,10 @@ export function QueueView({ b }: { b: Brief }) {
             <div className="brief-title">{todayPlaying ? 'Playing your brief' : curInQueue && curPos > 0 ? 'Resume your brief' : 'Play your brief'}</div>
             <div className="brief-sub">{summary}</div>
           </div>
+        </div>
+        <div className="brief-auto">
+          <span id="auto-l">Autoplay next episode</span>
+          <Switch on={p.autoplay} label="Autoplay next episode" onChange={b.setAutoplay} />
         </div>
         {unplayedAll.length > 0 && (
           <div className="daybar" role="group" aria-label="Today’s episodes">

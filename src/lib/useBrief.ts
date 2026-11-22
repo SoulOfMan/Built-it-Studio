@@ -202,8 +202,8 @@ export function useBrief() {
     const played = { ...pRef.current.played, [id]: true as const };
     const nx = nextUnplayed(id, played);
     setP(st => ({ ...st, played: { ...st.played, [id]: true }, pos: { ...st.pos, [id]: ep?.dur || st.pos[id] || 0 }, currentId: nx ? nx.id : st.currentId }));
-    if (nx) { pRef.current = { ...pRef.current, played, currentId: nx.id }; loadInto(nx); startPlayback(); }
-    else setPlaying(false);
+    if (nx && pRef.current.autoplay) { pRef.current = { ...pRef.current, played, currentId: nx.id }; loadInto(nx); startPlayback(); }
+    else { pRef.current = { ...pRef.current, played, currentId: nx ? nx.id : pRef.current.currentId }; setPlaying(false); }
   }, [findEp, nextUnplayed, loadInto, startPlayback]);
 
   const seek = useCallback((v: number) => {
@@ -340,6 +340,7 @@ export function useBrief() {
     refresh, addFeed, updateFeed, deleteFeed, reorderFeeds,
     play, toggle, seek, setSpeed, nextUnplayed,
     download, cancelDownload, removeDownload, clearDownloads,
+    setAutoplay: (on: boolean) => setP(st => ({ ...st, autoplay: on })),
     setPerFeed: (n: 1 | 2) => setP(st => ({ ...st, perFeed: n })),
     setSort: (s: Persisted['sort']) => setP(st => ({ ...st, sort: s }))
   };

@@ -14,6 +14,7 @@ export function loadState(): Persisted {
     saved: s.saved || {},
     speed: s.speed || 1,
     perFeed: s.perFeed === 2 ? 2 : 1,
+    autoplay: s.autoplay !== false,
     sort: s.sort === 'priority' ? 'priority' : 'time',
     currentId: s.currentId ?? null,
     updatedAt: s.updatedAt || 0

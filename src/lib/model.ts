@@ -53,6 +53,7 @@ export interface Persisted {
   saved: Record<string, Episode & { savedBytes: number; savedAt: number }>;
   speed: number;
   perFeed: 1 | 2;
+  autoplay: boolean;
   sort: SortMode;
   currentId: string | null;
   updatedAt: number;

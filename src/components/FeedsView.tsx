@@ -4,6 +4,7 @@ import {
 } from '@dnd-kit/core';
 import { SortableContext, arrayMove, useSortable, verticalListSortingStrategy, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { Switch } from './Switch';
 import type { Brief } from '../lib/useBrief';
 import { host, validUrl, type Feed } from '../lib/model';
 import { EditIcon, GripIcon, TrashIcon } from './Icons';
@@ -64,6 +65,10 @@ export function FeedsView({ b }: { b: Brief }) {
 
       <h2 style={{ marginTop: 28 }}>Queue settings</h2>
       <div className="settings">
+        <div className="setting">
+          <span>Autoplay next episode</span>
+          <Switch on={p.autoplay} label="Autoplay next episode" onChange={b.setAutoplay} />
+        </div>
         <div className="setting">
           <span>Episodes per feed</span>
           <Seg options={[[1, '1'], [2, '2']]} value={p.perFeed} onChange={v => b.setPerFeed(v as 1 | 2)} />
