@@ -20,7 +20,7 @@ const BROWSER_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
 const ACCEPT = 'application/rss+xml, application/atom+xml, application/xml;q=0.9, text/xml;q=0.9, */*;q=0.8';
 
 /** Some CDNs (e.g. BBC) reject unknown user agents or blip with 403/5xx: retry with a browser UA. */
-export async function fetchFeedText(url) {
+async function fetchText(url) {
   let lastErr;
   for (const ua of [UA, BROWSER_UA, BROWSER_UA]) {
     try {
@@ -37,3 +37,28 @@ export async function fetchFeedText(url) {
   throw lastErr;
 }
 
+
+const looksLikeFeed = t => /<(rss|feed|rdf:RDF)[\s>]/i.test(t.slice(0, 3000));
+
+/**
+ * Fetches a feed and returns { xml, url }. If the URL is a web page instead (or an Apple Podcasts link),
+ * finds the real RSS address from the page's <link rel="alternate"> or the iTunes lookup API.
+ */
+export async function fetchFeedText(url) {
+  const apple = url.match(/podcasts\.apple\.com\/.*\/id(\d+)/);
+  if (apple) {
+    const r = JSON.parse(await fetchText(`https://itunes.apple.com/lookup?id=${apple[1]}&entity=podcast`));
+    const feedUrl = r?.results?.[0]?.feedUrl;
+    if (!feedUrl) throw new Error('Could not find the RSS feed for that Apple Podcasts link');
+    return fetchFeedText(feedUrl);
+  }
+  const text = await fetchText(url);
+  if (looksLikeFeed(text)) return text;
+  const link = text.match(/<link[^>]+type=["']application\/(?:rss|atom)\+xml["'][^>]*>/i)?.[0];
+  const href = link?.match(/href=["']([^"']+)["']/i)?.[1];
+  if (href) {
+    const next = new URL(href, url).toString();
+    if (checkUrl(next) && next !== url) return fetchText(next);
+  }
+  throw new Error('That address is a web page, not an RSS feed');
+}

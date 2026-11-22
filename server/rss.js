@@ -5,7 +5,7 @@ const parser = new XMLParser({
   attributeNamePrefix: '@',
   textNodeName: '#text',
   trimValues: true,
-  processEntities: true,
+  processEntities: { enabled: true, maxTotalExpansions: 50000, maxExpandedLength: 5_000_000, maxEntityCount: 5000 },
   htmlEntities: true
 });
 
@@ -26,8 +26,22 @@ export function parseDuration(v) {
   return parts.reduce((acc, n) => acc * 60 + n, 0);
 }
 
+/** Big feeds list years of episodes. Keep only the first ~30 entries: faster, and avoids parser entity limits. */
+export function trimFeed(xml, keep = 30) {
+  const re = /<\/(item|entry)>/g;
+  let m, n = 0;
+  while ((m = re.exec(xml))) {
+    if (++n === keep) {
+      const head = xml.slice(0, m.index + m[0].length);
+      return head + (/<rss[\s>]/.test(xml.slice(0, 2000)) ? '</channel></rss>' : '</feed>');
+    }
+  }
+  return xml;
+}
+
 /** Turn an RSS 2.0 / iTunes podcast feed (or Atom with enclosures) into a compact JSON shape. */
 export function parseFeed(xml, feedUrl) {
+  xml = trimFeed(xml);
   const doc = parser.parse(xml);
   const channel = doc?.rss?.channel ?? doc?.feed;
   if (!channel) throw new Error('Not an RSS or Atom feed');

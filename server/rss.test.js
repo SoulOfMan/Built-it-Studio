@@ -52,3 +52,11 @@ test('blocks private and non-http URLs', () => {
   assert.equal(checkUrl('file:///etc/passwd'), null);
   assert.ok(checkUrl('https://feeds.megaphone.fm/x'));
 });
+
+test('trimFeed keeps the first entries and still parses big feeds', async () => {
+  const { trimFeed, parseFeed } = await import('./rss.js');
+  const items = Array.from({ length: 200 }, (_, i) => `<item><title>T${i} &nbsp;&eacute;</title><enclosure url="http://x/${i}.mp3"/></item>`).join('');
+  const xml = `<rss><channel><title>Big</title>${items}</channel></rss>`;
+  assert.ok(trimFeed(xml).length < xml.length);
+  assert.equal(parseFeed(xml, 'http://x/feed').episodes.length, 10);
+});
