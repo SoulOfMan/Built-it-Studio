@@ -48,7 +48,7 @@ docker build -t daily-brief .
 docker run -p 8787:8787 daily-brief
 ```
 
-Deploy it on any Node host (Render, Railway, Fly.io, a VPS…). **It must be served over HTTPS** for the service worker, offline mode and *Add to Home Screen* to work. `localhost` is the only exception.
+Deploy it on any Node host (on Vercel the `api/` functions replace the Express server) (Render, Railway, Fly.io, a VPS…). **It must be served over HTTPS** for the service worker, offline mode and *Add to Home Screen* to work. `localhost` is the only exception.
 
 ## Tests
 
