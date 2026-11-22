@@ -1,4 +1,4 @@
-export const UA = 'DailyBrief/1.0 (+podcast app)';
+export const UA = 'Labari/1.0 (+podcast app)';
 
 /** Only allow public http(s) URLs, so the proxy can't be pointed at the server's own network. */
 export function checkUrl(raw) {

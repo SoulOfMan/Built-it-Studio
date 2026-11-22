@@ -9,8 +9,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['icon.svg'],
       manifest: {
-        name: 'Daily Brief',
-        short_name: 'Daily Brief',
+        name: 'Labari',
+        short_name: 'Labari',
         description: 'Your news podcasts, queued and ready offline.',
         theme_color: '#f3f5f8',
         background_color: '#0e1726',

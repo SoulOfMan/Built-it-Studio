@@ -72,7 +72,7 @@ if (fs.existsSync(DIST)) {
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  app.listen(PORT, () => console.log(`Daily Brief server on http://localhost:${PORT}`));
+  app.listen(PORT, () => console.log(`Labari server on http://localhost:${PORT}`));
 }
 
 export default app;

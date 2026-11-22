@@ -48,15 +48,15 @@ export function QueueView({ b }: { b: Brief }) {
         </button>
       </div>
 
-      <section className="brief" aria-label="Today’s brief">
+      <section className="brief" aria-label="Today’s news">
         <div className="brief-top">
-          <button className="brief-play" aria-label={todayPlaying ? 'Pause' : curInQueue && curPos > 0 ? 'Resume today’s brief' : 'Play today’s brief'}
+          <button className="brief-play" aria-label={todayPlaying ? 'Pause' : curInQueue && curPos > 0 ? 'Resume today’s news' : 'Play today’s news'}
             disabled={!curInQueue && !firstUp}
             onClick={() => { if (curInQueue) b.toggle(); else if (firstUp) b.play(firstUp.id); }}>
             {todayPlaying ? <PauseIcon size={22} /> : <PlayIcon size={22} />}
           </button>
           <div className="brief-text">
-            <div className="brief-title">{todayPlaying ? 'Playing your brief' : curInQueue && curPos > 0 ? 'Resume your brief' : 'Play your brief'}</div>
+            <div className="brief-title">{todayPlaying ? 'Playing today’s news' : curInQueue && curPos > 0 ? 'Resume today’s news' : 'Play today’s news'}</div>
             <div className="brief-sub">{summary}</div>
           </div>
         </div>

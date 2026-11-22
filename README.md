@@ -1,6 +1,6 @@
-# Daily Brief
+# Labari
 
-An offline-ready news podcast queue, built from the *Daily Brief* clickable prototype. Each morning it pulls the latest episode (or two) from every feed you follow and lines them up into one “Today” queue. You can play the whole queue with one tap, download it for listening with no connection, and pick up where you left off.
+An offline-ready news podcast queue, built from the original clickable prototype. Each morning it pulls the latest episode (or two) from every feed you follow and lines them up into one “Today” queue. You can play the whole queue with one tap, download it for listening with no connection, and pick up where you left off.
 
 It's a **Progressive Web App**: open it on your phone, choose *Add to Home Screen* (or tap **Install app** on the Today screen), and it runs full-screen like a native app.
 
@@ -44,8 +44,8 @@ npm start            # serves the app + API on http://localhost:8787 (PORT to ch
 Or with Docker:
 
 ```bash
-docker build -t daily-brief .
-docker run -p 8787:8787 daily-brief
+docker build -t labari .
+docker run -p 8787:8787 labari
 ```
 
 Deploy it on any Node host (on Vercel the `api/` functions replace the Express server) (Render, Railway, Fly.io, a VPS…). **It must be served over HTTPS** for the service worker, offline mode and *Add to Home Screen* to work. `localhost` is the only exception.

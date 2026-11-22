@@ -262,7 +262,7 @@ export function useBrief() {
   const current = findEp(p.currentId);
   useEffect(() => {
     const ms = navigator.mediaSession; if (!ms) return;
-    if (current) ms.metadata = new MediaMetadata({ title: current.title, artist: current.show, album: 'Daily Brief', artwork: [...(current.img ? [{ src: current.img.replace(/^http:\/\//i, 'https://'), sizes: '512x512' }] : []), { src: '/icon-512.png', sizes: '512x512', type: 'image/png' }] });
+    if (current) ms.metadata = new MediaMetadata({ title: current.title, artist: current.show, album: 'Labari', artwork: [...(current.img ? [{ src: current.img.replace(/^http:\/\//i, 'https://'), sizes: '512x512' }] : []), { src: '/icon-512.png', sizes: '512x512', type: 'image/png' }] });
     const cur = () => audio.current.currentTime;
     const handlers: [MediaSessionAction, MediaSessionActionHandler][] = [
       ['play', () => toggle()], ['pause', () => toggle()],

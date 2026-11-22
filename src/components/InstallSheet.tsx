@@ -22,11 +22,11 @@ export function InstallSheet() {
   const close = () => { setOpen(false); try { localStorage.setItem(KEY, String(Date.now())); } catch { /* ignore */ } };
   if (!open || !available) return null;
   return (
-    <div className="sheet-wrap" role="dialog" aria-label="Install Daily Brief">
+    <div className="sheet-wrap" role="dialog" aria-label="Install Labari">
       <div className="sheet-scrim" onClick={close} />
       <div className="sheet">
         <img src="/icon-192.png" alt="" width="56" height="56" />
-        <h2>Install Daily Brief</h2>
+        <h2>Install Labari</h2>
         <p>{canPrompt ? 'Add it to your home screen to open full-screen and listen offline.' : <>Tap <b>Share</b> in Safari, then <b>Add to Home Screen</b>.</>}</p>
         {canPrompt && <button className="dark-btn sheet-cta" onClick={async () => { await install(); setOpen(false); }}><DownloadIcon size={16} /> Install app</button>}
         <button className="sheet-skip" onClick={close}>{canPrompt ? 'Not now' : 'Got it'}</button>

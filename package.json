@@ -1,7 +1,7 @@
 {
-  "name": "daily-brief",
+  "name": "labari",
   "version": "1.0.0",
-  "description": "Daily Brief — offline-ready news podcast queue (PWA)",
+  "description": "Labari — offline-ready news podcast queue (PWA)",
   "scripts": {
     "dev": "concurrently -k -n api,web \"node --watch server/index.js\" \"vite\"",
     "build": "tsc --noEmit && vite build",
